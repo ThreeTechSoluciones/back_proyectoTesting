@@ -42,6 +42,16 @@ public class Categoria {
     @Column(name = "fecha_eliminacion")
     private LocalDateTime fechaEliminacion;
 
+    public Categoria(int id, String nombre, LocalDateTime fechaEliminacion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.fechaEliminacion = fechaEliminacion;
+    }
+
+    public Categoria() {
+
+    }
+
     /**
      * Marca la categoría como eliminada, asignando la fecha actual al campo `fechaEliminacion`.
      */
@@ -63,6 +73,10 @@ public class Categoria {
      */
     public boolean esEliminado() {
         return this.fechaEliminacion != null;
+    }
+
+    public String getNombre() {
+        return this.nombre;
     }
 }
 

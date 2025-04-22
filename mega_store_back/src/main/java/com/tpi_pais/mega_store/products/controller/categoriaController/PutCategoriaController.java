@@ -23,9 +23,11 @@ public class PutCategoriaController {
         this.modelService = modelService;
         this.responseService = responseService;
     }
-    @SessionRequired
-    @PutMapping("/categoria")
-    public ResponseEntity<ApiResponse<Object>>  actualizar(@RequestBody CategoriaDTO model){
+
+    @PutMapping("/categoria/{id}")
+    public ResponseEntity<ApiResponse<Object>>  actualizar(@PathVariable int id,
+                                                           @RequestBody CategoriaDTO model){
+        model.setId(id);
         Categoria categoriaModificar = modelService.buscarPorId(model.getId());
         CategoriaDTO modelDTO = modelService.verificarAtributos(model);
         if (modelService.categoriaExistente(modelDTO.getNombre())){
@@ -35,7 +37,7 @@ public class PutCategoriaController {
             return responseService.successResponse(modelGuardado, "Categoria actualiazado");
         }
     }
-    @SessionRequired
+
     @PutMapping("/categoria/recuperar/{id}")
     public ResponseEntity<ApiResponse<Object>>  recuperar(@PathVariable Integer id) {
         Categoria model = modelService.buscarEliminadoPorId(id);

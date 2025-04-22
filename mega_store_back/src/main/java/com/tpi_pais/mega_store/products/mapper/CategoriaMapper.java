@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CategoriaMapper {
-
     /**
      * Constructor privado para evitar la creación de instancias de la clase.
      */

@@ -24,7 +24,6 @@ public class PostCategoriaController {
         this.responseService = responseService;
     }
 
-    @SessionRequired
     @PostMapping("/categoria")
     public ResponseEntity<ApiResponse<Object>>  guardar(@RequestBody CategoriaDTO model){
         model = modelService.verificarAtributos(model);

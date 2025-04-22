@@ -16,6 +16,15 @@ public class CategoriaDTO {
     private String nombre; // Nombre de la categoría.
     private LocalDateTime fechaEliminacion; // Fecha en la que la categoría fue eliminada (si aplica).
 
+    public CategoriaDTO() {
+    }
+
+    public CategoriaDTO(int id, String nombre, LocalDateTime fechaEliminacion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.fechaEliminacion = fechaEliminacion;
+    }
+
     /**
      * Verifica si el nombre de la categoría está vacío o es nulo.
      *
