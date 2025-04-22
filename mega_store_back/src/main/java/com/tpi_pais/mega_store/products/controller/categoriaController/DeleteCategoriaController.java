@@ -28,7 +28,6 @@ public class DeleteCategoriaController {
         this.productoService = productoService;
     }
 
-    @SessionRequired
     @DeleteMapping("/categoria/{id}")
     public ResponseEntity<ApiResponse<Object>>  eliminar(@PathVariable Integer id) {
         Categoria model = modelService.buscarPorId(id);
