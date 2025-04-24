@@ -53,10 +53,10 @@ public class CategoryControllerIntegration {
     void createCategory_butNameAlreadyExists() throws Exception {
         CategoriaDTO request = new CategoriaDTO(1, "Remeras", null);
         MvcResult result = this.mockMvc.perform(
-                post("/products/categoria")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(request))
-        ).andExpect(status().isBadRequest())
+                        post("/products/categoria")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(new ObjectMapper().writeValueAsString(request))
+                ).andExpect(status().isBadRequest())
                 .andReturn();
 
         String response = result.getResponse().getContentAsString();
@@ -113,3 +113,5 @@ public class CategoryControllerIntegration {
     }
 
 }
+
+
