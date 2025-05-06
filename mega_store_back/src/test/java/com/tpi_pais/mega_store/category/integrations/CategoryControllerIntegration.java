@@ -38,7 +38,7 @@ public class CategoryControllerIntegration {
     private CategoriaRepository categoriaRepository;
 
     @Test
-    void createCategory() throws Exception {
+    void createCategory() throws Exception { //* Registrar nueva categoría válida (Abril)
         CategoriaDTO request = new CategoriaDTO(1, "Ofertas", null);
         this.mockMvc.perform(
                 post("/products/categoria")
@@ -48,21 +48,37 @@ public class CategoryControllerIntegration {
         Optional<Categoria> categoria = categoriaRepository.findById(1);
         Assertions.assertFalse(categoria.get().esEliminado());
     }
-
     @Test
     @Sql("/scripts/INSERT_CATEGORY.sql")
-    void createCategory_butNameAlreadyExists() throws Exception {
-        CategoriaDTO request = new CategoriaDTO(1, "Remeras", null);
-        MvcResult result = this.mockMvc.perform(
-                        post("/products/categoria")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(new ObjectMapper().writeValueAsString(request))
-                ).andExpect(status().isBadRequest())
-                .andReturn();
-
-        String response = result.getResponse().getContentAsString();
-        Assertions.assertTrue(response.contains("Ya existe una categoria con ese nombre"));
+    void editCategory() throws Exception { //editar nombre de una categoría existente (Ro)
+        CategoriaDTO request = new CategoriaDTO(1, "Medias Largas", null);
+        this.mockMvc.perform(
+                put("/products/categoria/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(request))
+        ).andExpect(status().isOk());
+        Optional<Categoria> categoria = categoriaRepository.findById(1);
+        Assertions.assertTrue(categoria.isPresent());
+        Assertions.assertEquals("Medias Largas", categoria.get().getNombre());
     }
+
+
+    @Test //*
+    @Sql("/scripts/INSERT_CATEGORY.sql") //Ocultar categoría al eliminarla (Lu)
+    void deleteCategory() throws Exception {
+        this.mockMvc.perform(
+                delete("/products/categoria/1")
+        ).andExpect(status().isOk());
+
+        Assertions.assertTrue(categoriaRepository.findById(1).get().esEliminado());
+    }
+
+
+
+
+
+
+
 
     @Test
     @Sql("/scripts/INSERT_CATEGORY.sql")
@@ -79,29 +95,22 @@ public class CategoryControllerIntegration {
         Assertions.assertTrue(response.contains("Zapatillas"));
     }
 
-    @Test
-    @Sql("/scripts/INSERT_CATEGORY.sql")
-    void editCategory() throws Exception {
-        CategoriaDTO request = new CategoriaDTO(1, "Medias Largas", null);
-        this.mockMvc.perform(
-                put("/products/categoria/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(request))
-        ).andExpect(status().isOk());
-        Optional<Categoria> categoria = categoriaRepository.findById(1);
-        Assertions.assertTrue(categoria.isPresent());
-        Assertions.assertEquals("Medias Largas", categoria.get().getNombre());
-    }
 
     @Test
-    @Sql("/scripts/INSERT_CATEGORY.sql")
-    void deleteCategory() throws Exception {
-        this.mockMvc.perform(
-                delete("/products/categoria/1")
-        ).andExpect(status().isOk());
+    @Sql("/scripts/INSERT_CATEGORY.sql") //*
+    void createCategory_butNameAlreadyExists() throws Exception {
+        CategoriaDTO request = new CategoriaDTO(1, "Remeras", null);
+        MvcResult result = this.mockMvc.perform(
+                        post("/products/categoria")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(new ObjectMapper().writeValueAsString(request))
+                ).andExpect(status().isBadRequest())
+                .andReturn();
 
-        Assertions.assertTrue(categoriaRepository.findById(1).get().esEliminado());
+        String response = result.getResponse().getContentAsString();
+        Assertions.assertTrue(response.contains("Ya existe una categoria con ese nombre"));
     }
+
 
     @Test
     @Sql("/scripts/INSERT_PRODUCT.sql")
