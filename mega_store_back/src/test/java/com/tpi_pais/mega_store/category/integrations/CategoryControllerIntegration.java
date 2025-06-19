@@ -37,7 +37,7 @@ public class CategoryControllerIntegration {
     private CategoriaRepository categoriaRepository;
 
     @Test
-    void createCategory() throws Exception {
+    void createCategory() throws Exception { //* Registrar nueva categoría válida (Abril)
         CategoriaDTO request = new CategoriaDTO(1, "Ofertas", null);
         this.mockMvc.perform(
                 post("/products/categoria")
@@ -47,7 +47,6 @@ public class CategoryControllerIntegration {
         Optional<Categoria> categoria = categoriaRepository.findById(1);
         Assertions.assertFalse(categoria.get().esEliminado());
     }
-
     @Test
     @Sql("/scripts/INSERT_CATEGORY.sql")
     void editCategory() throws Exception {
@@ -88,6 +87,15 @@ public class CategoryControllerIntegration {
         Assertions.assertTrue(response.contains("Ya existe una categoria con ese nombre"));
     }
 
+
+  
+
+
+
+
+
+
+
     @Test
     @Sql("/scripts/INSERT_CATEGORY.sql")
     void createCategory_butCategoryIsDeleted() throws Exception {
@@ -102,6 +110,7 @@ public class CategoryControllerIntegration {
         String response = result.getResponse().getContentAsString();
         Assertions.assertTrue(response.contains("Zapatillas"));
     }
+
 
 
     @Test

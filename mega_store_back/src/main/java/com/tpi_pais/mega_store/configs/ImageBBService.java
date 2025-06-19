@@ -24,7 +24,7 @@ public class ImageBBService {
     // URL de la API ImgBB para la carga de imágenes
     private static final String API_URL = "https://api.imgbb.com/1/upload";
     // Clave de API para autenticar las solicitudes a ImgBB
-    private static final String API_KEY = "c01631214212f30966500c874875dcc8";
+    private static final String API_KEY = "d673058c363d82892210fec6671c4326";
 
     /**
      * Método principal para subir una imagen a ImgBB.
