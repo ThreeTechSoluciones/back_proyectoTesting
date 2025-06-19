@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -48,6 +47,31 @@ public class CategoryControllerIntegration {
         Optional<Categoria> categoria = categoriaRepository.findById(1);
         Assertions.assertFalse(categoria.get().esEliminado());
     }
+
+    @Test
+    @Sql("/scripts/INSERT_CATEGORY.sql")
+    void editCategory() throws Exception {
+        CategoriaDTO request = new CategoriaDTO(1, "Medias Largas", null);
+        this.mockMvc.perform(
+                put("/products/categoria/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(request))
+        ).andExpect(status().isOk());
+        Optional<Categoria> categoria = categoriaRepository.findById(1);
+        Assertions.assertTrue(categoria.isPresent());
+        Assertions.assertEquals("Medias Largas", categoria.get().getNombre());
+    }
+
+    @Test
+    @Sql("/scripts/INSERT_CATEGORY.sql")
+    void deleteCategory() throws Exception {
+        this.mockMvc.perform(
+                delete("/products/categoria/1")
+        ).andExpect(status().isOk());
+
+        Assertions.assertTrue(categoriaRepository.findById(1).get().esEliminado());
+    }
+
 
     @Test
     @Sql("/scripts/INSERT_CATEGORY.sql")
@@ -79,29 +103,6 @@ public class CategoryControllerIntegration {
         Assertions.assertTrue(response.contains("Zapatillas"));
     }
 
-    @Test
-    @Sql("/scripts/INSERT_CATEGORY.sql")
-    void editCategory() throws Exception {
-        CategoriaDTO request = new CategoriaDTO(1, "Medias Largas", null);
-        this.mockMvc.perform(
-                put("/products/categoria/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(request))
-        ).andExpect(status().isOk());
-        Optional<Categoria> categoria = categoriaRepository.findById(1);
-        Assertions.assertTrue(categoria.isPresent());
-        Assertions.assertEquals("Medias Largas", categoria.get().getNombre());
-    }
-
-    @Test
-    @Sql("/scripts/INSERT_CATEGORY.sql")
-    void deleteCategory() throws Exception {
-        this.mockMvc.perform(
-                delete("/products/categoria/1")
-        ).andExpect(status().isOk());
-
-        Assertions.assertTrue(categoriaRepository.findById(1).get().esEliminado());
-    }
 
     @Test
     @Sql("/scripts/INSERT_PRODUCT.sql")
@@ -114,6 +115,4 @@ public class CategoryControllerIntegration {
     }
 
 }
-
-
 
